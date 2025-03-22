@@ -21,10 +21,10 @@ jobs:
     - name: Install Firebase CLI
       run: npm install -g firebase-tools
 
-    - name: Write service account key to file
-      run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > ${{ github.workspace }}/key.json
+    - name: Create key.json from GitHub Secret
+      run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > $GITHUB_WORKSPACE/key.json
 
     - name: Deploy to Firebase
-      run: |
-        export GOOGLE_APPLICATION_CREDENTIALS="${{ github.workspace }}/key.json"
-        firebase deploy --project=sampleaaaa-firebase-ai-app
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/key.json
+      run: firebase deploy --project=sampleaaaa-firebase-ai-app
