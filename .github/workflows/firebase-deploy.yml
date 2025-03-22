@@ -8,20 +8,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
 
-      - name: Create service account JSON
-        run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > key.json
+    - name: Write service account key to file
+      run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > ${{ github.workspace }}/key.json
 
-      - name: Deploy with service account
-        run: GOOGLE_APPLICATION_CREDENTIALS=key.json firebase deploy --project=sampleaaaa-firebase-ai-app
+    - name: Deploy to Firebase
+      run: |
+        export GOOGLE_APPLICATION_CREDENTIALS="${{ github.workspace }}/key.json"
+        firebase deploy --project=sampleaaaa-firebase-ai-app
