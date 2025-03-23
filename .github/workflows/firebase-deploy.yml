@@ -24,7 +24,9 @@ jobs:
     - name: Create key.json from GitHub Secret
       run: echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > $GITHUB_WORKSPACE/key.json
 
+   - name: Authenticate to Firebase via Service Account
+  run: |
+    echo "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" > ${HOME}/firebase-key.json
+    export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/firebase-key.json"
     - name: Deploy to Firebase
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: $GITHUB_WORKSPACE/key.json
-      run: firebase deploy --project=sampleaaaa-firebase-ai-app
+  run: firebase deploy --only hosting
